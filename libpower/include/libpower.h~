@@ -1,0 +1,10 @@
+/*
+	libpower.h
+	Function declarations for libpower.c. 
+	Written by Per Johansson.
+*/
+#ifndef LIBCOMPONENT_H
+#define LIBCOMPONENT_H
+float calc_power_r(float volt, float resistance);
+float calc_power_i(float volt, float current);
+#endif
