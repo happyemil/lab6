@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <resistance.h>
 
 static float randFloat(void)
 {
@@ -28,9 +29,9 @@ int main( int argc, const char* argv[] )
       printf("  Resistor[%d]: %f\n", j, resistors[j]); 
     }
 
-    float totalResistance = 1.0;//calc_resistance(numResistors, 
-				//	    couplingType,
-				//	    resistors);
+    float totalResistance = calc_resistance(numResistors, 
+					    couplingType,
+					    resistors);
 
     printf("  Total resistance: %f\n", totalResistance);
 

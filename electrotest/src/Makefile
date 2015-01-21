@@ -1,6 +1,14 @@
-all: electrotest.o
-	gcc -o electrotest electrotest.c -L. -lresistance -Wl,-rpath='../../libresistance/src/'
-#	gcc -o electrotest electrotest.o
+
+
+INCLUDES=-I../../libresistance/include 
+
+OBJS=electrotest.o
+
+all: $(OBJS)
+	gcc $(INCLUDES) -o electrotest $(OBJS) -L../../libresistance/src/ -lresistance -Wl,-rpath=../../libresistance/src/
+
+%.o: %.c
+	gcc $(INCLUDES) -c $<
 
 .PHONY: run
 run: all
@@ -8,4 +16,5 @@ run: all
 
 ./PHONY: clean
 clean:
-	rm -f electrotest *.o
+	rm -f electrotest *.o 
+	echo $(ROOT_DIR)
