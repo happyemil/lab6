@@ -22,7 +22,7 @@ float calc_resistance(int count, char conn, float *array)
 
     retVal = 1 / tmpSum;
   }
-  else (conn == 'S')
+  else if (conn == 'S')
   {
     for (i = 0; i < count; i++)
     {
