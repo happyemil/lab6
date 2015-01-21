@@ -1,4 +1,6 @@
-#include "include/libcomponent.h"
+/* Author Emil Käll*/
+
+#include "../include/libcomponent.h"
 
 int e_resistance(float orig_resistance, float *res_array)
 {
@@ -6,19 +8,50 @@ int e_resistance(float orig_resistance, float *res_array)
   float E12_Array[13] = {0,10,12,15,18,22,27,33,39,47,56,68,82};
   int i,j,k;
   
-  closest_distance = orig_resistance;
-  for (i=0;i<13;i++)
-    for (j=0;j<13;j++)
-      for (k=0;k<13;k++)
+  // Let's create a larger array for all decades, i.e all E12 values
+  float fullE12_Array[13+12+12+12+12+1];
+  fullE12_Array[0] = 0;
+  int decade;
+  
+  //We loop over the decades
+  for (decade=1;decade<6;decade++)
+    {
+      int whatDecade=1;
+      int j;
+      //Here we just create a value to multiply with
+      for(j=1;j<decade;j++)
+	whatDecade *= 10;
+
+      int i=0;
+      while(i++<13)
 	{
+	  //Add to the full array.
+	  fullE12_Array[i+(decade-1)*12]=E12_Array[i]*whatDecade;
+	}
+    }
+  //The last megaohm
+  fullE12_Array[61]=1000000;
+
+  //Let's set an initial value for closest distance. Assume we start with all three 
+  //resistors at 0 ohm
+  closest_distance = orig_resistance;
+  //Three nested loops tests all possible outcomes
+  for (i=0;i<61;i++)
+    for (j=0;j<61;j++)
+      for (k=0;k<61;k++)
+	{
+	  //Lets check how close we are
 	  diff = orig_resistance - E12_Array[i]-E12_Array[j]-E12_Array[k];
+	  //If we are above target we take that diff instead
 	  if (diff<0)
 	    diff = E12_Array[i]+E12_Array[j]+E12_Array[k]-orig_resistance;
 	  if (diff == 0)
 	    {
+	      //If we get here we're done. Just to assign the values to the result array
 	      *res_array++ = E12_Array[i];
 	      *res_array++ = E12_Array[j];
 	      *res_array = E12_Array[k];
+	      //Lets se how many resistors in series we use
 	      int count=0;
 	      if (i==0)
 		count++;
@@ -30,17 +63,22 @@ int e_resistance(float orig_resistance, float *res_array)
 	    }
 	  if (diff<closest_distance)
 	    {
-	      printf("%f.1\n",diff);
+	      //We got closer. Set that distance as the closest one and update
+	      //resistor values
 	      closest_distance = diff;
 	      res1 = E12_Array[i];
 	      res2 = E12_Array[j];
 	      res3 = E12_Array[k];
 	    }
 	}
+
+  //We are out of all for-loops meaning that we didn't find a perfect match,
+  //but the closest match is in res1,2,3.
   *res_array++ = res1;
   *res_array++ = res2;
   *res_array = res3;
 
+  //How many resistors did we use?
   int count=0;
   if (res1==0)
     count++;
@@ -50,3 +88,4 @@ int e_resistance(float orig_resistance, float *res_array)
     count++;
   return count;
 }
+
