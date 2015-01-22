@@ -1,7 +1,12 @@
-all: libresistance.c
-	gcc -c -fPIC libresistance.c
+.Phony: all clean
+
+all: libresistance.so
+
+%.o:%c 
+	gcc -c -fPIC <&
+
+libresistance.so: libresistance.o
 	gcc -shared -fPIC -o libresistance.so libresistance.o
 
-.PHONY: clean
 clean:
 	rm -f *.o *.so
