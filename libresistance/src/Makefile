@@ -1,4 +1,6 @@
-.Phony: all clean install
+CPATH = ../include
+
+.Phony: all clean install runtest
 
 all: libresistance.so
 
@@ -24,5 +26,15 @@ uninstall:
         fi
 	rm /usr/lib/libresistance.so
 
+test: libresistance.so test.o 
+	gcc -o test test.o -L. -lresistance -Wl,-rpath=.
+
+runtest: test
+	./test
+
+%.o: %.c
+	gcc -c -I. $? 
+
 clean:
+	echo $(CPATH)
 	rm -f *.o *.so
