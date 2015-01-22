@@ -1,15 +1,21 @@
-INCLUDES=-I../../libresistance/include 
+ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-OBJS=electrotest.o
+INCLUDES=-I$(ROOT_DIR)/../../libresistance/include 
 
-.PHONY: all clean run
+OBJS=$(ROOT_DIR)/electrotest.o
+LIBS=$(ROOT_DIR)/../../libresistance/src/libresistance.so
 
-all:
-	cd ../../libresistance/src && $(MAKE) all MAKEFLAGS=
-	$(MAKE) electrotest
+.PHONY: all clean run lib
 
-electrotest: $(OBJS) ../../libresistance/src/libresistance.so
-	gcc $(INCLUDES) -o electrotest $(OBJS) -L../../libresistance/src/ -lresistance -Wl,-rpath=../../libresistance/src/
+all: lib
+	cd $(ROOT_DIR) && $(MAKE) -f $(ROOT_DIR)/Makefile electrotest
+
+lib:
+	cd $(ROOT_DIR)/../../libresistance/src && $(MAKE) all MAKEFLAGS=
+# Add more libs here
+
+electrotest: $(OBJS) $(LIBS)
+	gcc $(INCLUDES) -o $(ROOT_DIR)/electrotest $(OBJS) -L$(ROOT_DIR)/../../libresistance/src/ -lresistance -Wl,-rpath=$(ROOT_DIR)/../../libresistance/src/
 
 %.o: %.c
 	gcc $(INCLUDES) -c $<
@@ -19,4 +25,5 @@ run: all
 
 clean:
 	rm -f electrotest *.o 
-	cd ../../libresistance/src && $(MAKE) clean MAKEFLAGS=	
+	cd $(ROOT_DIR)/../../libresistance/src && $(MAKE) clean MAKEFLAGS=
+	echo $(ROOT_DIR)	
