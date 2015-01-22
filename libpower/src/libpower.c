@@ -13,7 +13,7 @@ float calc_power_r(float volt, float resistance){
 	float P = 0.0;
 	float R = resistance;
 	float U = volt;
-	P = (U * 2)/R;
+	P = (U * U)/R;
 	return P;
 }
 
