@@ -16,5 +16,13 @@ install: libresistance.so
         fi
 	cp libresistance.so /usr/lib
 
+uninstall:
+	@runner=`whoami` ; \
+        if test $$runner != "root" ; \
+        then \
+                echo "ERROR: You are not root. Run 'sudo make $@'"; exit 1; \
+        fi
+	rm /usr/lib/libresistance.so
+
 clean:
 	rm -f *.o *.so
