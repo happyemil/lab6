@@ -5,8 +5,11 @@ float calc_resistance(int count, char conn, float *array)
 {
   float retVal = 0;
 
-  if ((count == 0) || (array == 0))
+  if (count == 0)
     return 0; // Avoid divide by zero in parallel calculation
+
+  if (array == 0)
+    return -1;
 
   int i = 0;
   if (conn == 'P')
