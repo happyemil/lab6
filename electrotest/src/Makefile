@@ -8,7 +8,7 @@ all:
 	cd ../../libresistance/src && $(MAKE) all MAKEFLAGS=
 	$(MAKE) electrotest
 
-electrotest: $(OBJS)
+electrotest: $(OBJS) ../../libresistance/src/libresistance.so
 	gcc $(INCLUDES) -o electrotest $(OBJS) -L../../libresistance/src/ -lresistance -Wl,-rpath=../../libresistance/src/
 
 %.o: %.c

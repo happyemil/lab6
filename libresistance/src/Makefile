@@ -2,8 +2,8 @@
 
 all: libresistance.so
 
-%.o:%c 
-	gcc -c -fPIC <&
+libresistance.o:libresistance.c ../include/resistance.h 
+	gcc -c -fPIC libresistance.c
 
 libresistance.so: libresistance.o
 	gcc -shared -fPIC -o libresistance.so libresistance.o
