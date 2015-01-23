@@ -34,8 +34,7 @@
 
 ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-INCLUDES=-I$(ROOT_DIR)/../../libresistance/include -I$(ROOT_DIR)/../../libcomponent/include 
-
+INCLUDES=-I$(ROOT_DIR)/../../libresistance/include -I$(ROOT_DIR)/../../libcomponent/include -I$(ROOT_DIR)/../../libpower/include
 OBJS=$(ROOT_DIR)/electrotest.o
 
 LOCALLY_LINKED_VERSION=electrotest_local
@@ -50,11 +49,13 @@ all: lib $(LOCALLY_LINKED_VERSION)
 lib:
 	cd $(ROOT_DIR)/../../libresistance/src && $(MAKE) all MAKEFLAGS=
 	cd $(ROOT_DIR)/../../libcomponent/src && $(MAKE) all MAKEFLAGS=
+	cd $(ROOT_DIR)/../../libpower/src && $(MAKE) all MAKEFLAGS=
 # Add more libs here
 
 install_libs:
 	cd $(ROOT_DIR)/../../libresistance/src && $(MAKE) install MAKEFLAGS=
 	cd $(ROOT_DIR)/../../libcomponent/src && $(MAKE) install MAKEFLAGS=
+	cd $(ROOT_DIR)/../../libpower/src && $(MAKE) install MAKEFLAGS=
 
 install: install_libs $(GLOBALLY_LINKED_VERSION)
 	@runner=`whoami` ; \
@@ -73,10 +74,10 @@ uninstall:
 	rm /usr/bin/$(GLOBALLY_LINKED_VERSION)
 
 $(LOCALLY_LINKED_VERSION): $(OBJS)
-	gcc $(INCLUDES) -g -o $(LOCALLY_LINKED_VERSION) $(OBJS) -L$(ROOT_DIR)/../../libresistance/src/ -lresistance -Wl,-rpath=$(ROOT_DIR)/../../libresistance/src/ -L$(ROOT_DIR)/../../libcomponent/src/ -lcomponent -Wl,-rpath=$(ROOT_DIR)/../../libcomponent/src/
+	gcc $(INCLUDES) -g -o $(LOCALLY_LINKED_VERSION) $(OBJS) -L$(ROOT_DIR)/../../libresistance/src/ -lresistance -Wl,-rpath=$(ROOT_DIR)/../../libresistance/src/ -L$(ROOT_DIR)/../../libcomponent/src/ -lcomponent -Wl,-rpath=$(ROOT_DIR)/../../libcomponent/src/ -L$(ROOT_DIR)/../../libpower/src/ -lpower -Wl,-rpath=$(ROOT_DIR)/../../libpower/src/
 
 $(GLOBALLY_LINKED_VERSION): $(OBJS)
-	gcc $(INCLUDES) -g -o $(GLOBALLY_LINKED_VERSION) $(OBJS) -lresistance -lcomponent
+	gcc $(INCLUDES) -g -o $(GLOBALLY_LINKED_VERSION) $(OBJS) -lresistance -lcomponent -lpower
 
 %.o: %.c
 	gcc $(INCLUDES) -g -c $<
@@ -88,3 +89,4 @@ clean:
 	rm -f $(LOCALLY_LINKED_VERSION) $(GLOBALLY_LINKED_VERSION) *.o 
 	cd $(ROOT_DIR)/../../libresistance/src && $(MAKE) clean MAKEFLAGS=
 	cd $(ROOT_DIR)/../../libcomponent/src && $(MAKE) clean MAKEFLAGS=
+	cd $(ROOT_DIR)/../../libpower/src && $(MAKE) clean MAKEFLAGS=

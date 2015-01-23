@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <resistance.h>
 #include <libcomponent.h>
+#include <libpower.h>
 
 static float randFloat(void)
 {
@@ -68,9 +69,25 @@ void testLibcomponent(void)
 
 }
 
+void testLibPower(void){
+	float res = 0.0;
+	float res2 = 0.0;
+	float U = 3.01;
+	float I = 2.2;
+	float R = 1.75;
+	res = calc_power_i(U,I);
+	res2 = calc_power_r(U, R);
+	
+	printf("Libpower test: \n");
+	printf("Test calc power P=U*I -> U=%6.4f, I=%6.4f results in P=%6.4fW\n", U, I, res);
+	printf("Test calc power P=U^2/R: U=%6.4f, R=%6.4f results in P=%6.4fW\n", U, R, res2);
+
+}
+
 int main( int argc, const char* argv[] )
 {
   TestCase1();
   testLibcomponent();
+  testLibPower();
 }
 
