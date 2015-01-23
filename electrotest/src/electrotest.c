@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <resistance.h>
+#include <libcomponent.h>
 
 static float randFloat(void)
 {
@@ -45,8 +46,30 @@ static void TestCase1(void)
   }
 }
 
+void testLibcomponent(void)
+{
+  const int numRuns = 10;
+  const float maxInputResistor = 1000000.0;
+  float inputResistor;
+  int count=0;
+
+  int i = 0;
+  for (i = 0; i < numRuns; i++)
+    {
+      inputResistor = randFloat() * maxInputResistor;
+      printf("Finding resistor replacement for %f Ohms\n",inputResistor);
+      float *resultingResistors = (float*)malloc(sizeof(float) * 3);
+      count = e_resistance(inputResistor, resultingResistors);
+      printf("Number of replacement resistors: %d\n",count);
+      printf("Replacements from E12: %f %f %f\n", *resultingResistors++, *resultingResistors++, *resultingResistors);
+      
+    }
+
+}
+
 int main( int argc, const char* argv[] )
 {
   TestCase1();
+  testLibComponent();
 }
 
