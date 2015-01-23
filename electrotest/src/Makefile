@@ -73,13 +73,13 @@ uninstall:
 	rm /usr/bin/$(GLOBALLY_LINKED_VERSION)
 
 $(LOCALLY_LINKED_VERSION): $(OBJS)
-	gcc $(INCLUDES) -o $(LOCALLY_LINKED_VERSION) $(OBJS) -L$(ROOT_DIR)/../../libresistance/src/ -lresistance -Wl,-rpath=$(ROOT_DIR)/../../libresistance/src/ -L$(ROOT_DIR)/../../libcomponent/src/ -llibcomponent -Wl,-rpath=$(ROOT_DIR)/../../libcomponent/src/
+	gcc $(INCLUDES) -g -o $(LOCALLY_LINKED_VERSION) $(OBJS) -L$(ROOT_DIR)/../../libresistance/src/ -lresistance -Wl,-rpath=$(ROOT_DIR)/../../libresistance/src/ -L$(ROOT_DIR)/../../libcomponent/src/ -lcomponent -Wl,-rpath=$(ROOT_DIR)/../../libcomponent/src/
 
 $(GLOBALLY_LINKED_VERSION): $(OBJS)
-	gcc $(INCLUDES) -o $(GLOBALLY_LINKED_VERSION) $(OBJS) -lresistance -llibcomponent
+	gcc $(INCLUDES) -g -o $(GLOBALLY_LINKED_VERSION) $(OBJS) -lresistance -lcomponent
 
 %.o: %.c
-	gcc $(INCLUDES) -c $<
+	gcc $(INCLUDES) -g -c $<
 
 run: all
 	./$(LOCALLY_LINKED_VERSION)

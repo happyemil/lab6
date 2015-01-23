@@ -61,7 +61,8 @@ void testLibcomponent(void)
       float *resultingResistors = (float*)malloc(sizeof(float) * 3);
       count = e_resistance(inputResistor, resultingResistors);
       printf("Number of replacement resistors: %d\n",count);
-      printf("Replacements from E12: %f %f %f\n", *resultingResistors++, *resultingResistors++, *resultingResistors);
+      printf("Replacements from E12: %f %f %f\n", resultingResistors[0], resultingResistors[1], resultingResistors[2]);
+      free(resultingResistors);
       
     }
 
@@ -70,6 +71,6 @@ void testLibcomponent(void)
 int main( int argc, const char* argv[] )
 {
   TestCase1();
-  testLibComponent();
+  testLibcomponent();
 }
 
