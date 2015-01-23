@@ -34,7 +34,7 @@
 
 ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-INCLUDES=-I$(ROOT_DIR)/../../libresistance/include 
+INCLUDES=-I$(ROOT_DIR)/../../libresistance/include -I$(ROOT_DIR)/../../libcomponent/include 
 
 OBJS=$(ROOT_DIR)/electrotest.o
 
@@ -49,10 +49,12 @@ all: lib $(LOCALLY_LINKED_VERSION)
 
 lib:
 	cd $(ROOT_DIR)/../../libresistance/src && $(MAKE) all MAKEFLAGS=
+	cd $(ROOT_DIR)/../../libcomponent/src && $(MAKE) all MAKEFLAGS=
 # Add more libs here
 
 install_libs:
 	cd $(ROOT_DIR)/../../libresistance/src && $(MAKE) install MAKEFLAGS=
+	cd $(ROOT_DIR)/../../libcomponent/src && $(MAKE) install MAKEFLAGS=
 
 install: install_libs $(GLOBALLY_LINKED_VERSION)
 	@runner=`whoami` ; \
@@ -71,10 +73,10 @@ uninstall:
 	rm /usr/bin/$(GLOBALLY_LINKED_VERSION)
 
 $(LOCALLY_LINKED_VERSION): $(OBJS)
-	gcc $(INCLUDES) -o $(LOCALLY_LINKED_VERSION) $(OBJS) -L$(ROOT_DIR)/../../libresistance/src/ -lresistance -Wl,-rpath=$(ROOT_DIR)/../../libresistance/src/
+	gcc $(INCLUDES) -o $(LOCALLY_LINKED_VERSION) $(OBJS) -L$(ROOT_DIR)/../../libresistance/src/ -lresistance -Wl,-rpath=$(ROOT_DIR)/../../libresistance/src/ -L$(ROOT_DIR)/../../libcomponent/src/ -llibcomponent -Wl,-rpath=$(ROOT_DIR)/../../libcomponent/src/
 
 $(GLOBALLY_LINKED_VERSION): $(OBJS)
-	gcc $(INCLUDES) -o $(GLOBALLY_LINKED_VERSION) $(OBJS) -lresistance
+	gcc $(INCLUDES) -o $(GLOBALLY_LINKED_VERSION) $(OBJS) -lresistance -llibcomponent
 
 %.o: %.c
 	gcc $(INCLUDES) -c $<
@@ -85,3 +87,4 @@ run: all
 clean:
 	rm -f $(LOCALLY_LINKED_VERSION) $(GLOBALLY_LINKED_VERSION) *.o 
 	cd $(ROOT_DIR)/../../libresistance/src && $(MAKE) clean MAKEFLAGS=
+	cd $(ROOT_DIR)/../../libcomponent/src && $(MAKE) clean MAKEFLAGS=
