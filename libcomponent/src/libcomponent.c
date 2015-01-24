@@ -46,17 +46,44 @@ int e_resistance(float orig_resistance, float *res_array)
 	  if (diff == 0)
 	    {
 	      //If we get here we're done. Just to assign the values to the result array
-	      *res_array++ = fullE12_Array[i];
-	      *res_array++ = fullE12_Array[j];
-	      *res_array = fullE12_Array[k];
+	      if (res1 == 0 && res2 == 0)
+		{
+		  res_array[0] = res3;
+		  res_array[1] = 0;
+		  res_array[2] = 0;
+		}
+	      else if (res1 == 0 && res3 == 0)
+		{
+		  res_array[0] = res2;
+		  res_array[1] = 0;
+		  res_array[2] = 0;
+		}
+	      else if (res1 == 0 && res2 != 0 && res3 != 0 )
+		{
+		  res_array[0] = res2;
+		  res_array[1] = res3;
+		  res_array[2] = 0;
+		}
+	      else if (res1 != 0 && res2 == 0 && res3 != 0 )
+		{
+		  res_array[0] = res1;
+		  res_array[1] = res3;
+		  res_array[2] = 0;
+		}
+	      else
+		{
+		  res_array[0] = res1;
+		  res_array[1] = res2;
+		  res_array[2] = res3;
+		}
 	      //Lets se how many resistors in series we use
-	      int count=0;
+	      int count=3;
 	      if (i==0)
-		count++;
+		--count;
 	      if (j==0)
-		count++;
+		--count;
 	      if (k==0)
-		count++;
+		--count;
 	      return count;
 	    }
 	  if (diff<closest_distance)
@@ -72,18 +99,46 @@ int e_resistance(float orig_resistance, float *res_array)
 
   //We are out of all for-loops meaning that we didn't find a perfect match,
   //but the closest match is in res1,2,3.
-  *res_array++ = res1;
-  *res_array++ = res2;
-  *res_array = res3;
+  if (res1 == 0 && res2 == 0)
+    {
+      res_array[0] = res3;
+      res_array[1] = 0;
+      res_array[2] = 0;
+    }
+  else if (res1 == 0 && res3 == 0)
+    {
+      res_array[0] = res2;
+      res_array[1] = 0;
+      res_array[2] = 0;
+    }
+  else if (res1 == 0 && res2 != 0 && res3 != 0 )
+    {
+      res_array[0] = res2;
+      res_array[1] = res3;
+      res_array[2] = 0;
+    }
+  else if (res1 != 0 && res2 == 0 && res3 != 0 )
+    {
+      res_array[0] = res1;
+      res_array[1] = res3;
+      res_array[2] = 0;
+    }
+  else
+    {
+      res_array[0] = res1;
+      res_array[1] = res2;
+      res_array[2] = res3;
+    }
+
 
   //How many resistors did we use?
   int count=3;
   if (res1==0)
-    count--;
+    --count;
   if (res2==0)
-    count--;
+    --count;
   if (res3==0)
-    count--;
+    --count;
   return count;
 }
 
