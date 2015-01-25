@@ -27,6 +27,7 @@ int main( int argc, const char* argv[] )
 	
 	array = (float *)malloc(sizeof(float)*count);
 	res_array = (float *)malloc(sizeof(float)*3);
+	
 	for(i = 0 ; i<count;i++){
 		printf("Komponent %d i ohm:",i+1);
         	scanf("%f",&array[i]);
@@ -34,9 +35,7 @@ int main( int argc, const char* argv[] )
 	
 	eResistans = calc_resistance(count,mode,array);
 	printf("Ersättningsresistans:%.f\n",eResistans); 
-	printf("Effekt:%.2fW\n", calc_power_r((float)U,eResistans));
-	
-
+	printf("Effekt:%.2fW\n", calc_power_r(U,eResistans));
 	
 	int componentCount = e_resistance(eResistans, res_array);
 /*	printf("\nComponentcount: %d\n",componentCount);

@@ -56,7 +56,9 @@ printf("Ersättningsresistanser i E12-serien kopplade i serie:");
 	free(array);
 	free(res_array);
 	printf("\nTest done\n");
-/**/
+/*
+	Written by Per - woop
+*/
 	
 }
 
