@@ -38,12 +38,12 @@ int main( int argc, const char* argv[] )
 	printf("Effekt:%.2fW\n", calc_power_r(U,eResistans));
 	
 	int componentCount = e_resistance(eResistans, res_array);
-/*	printf("\nComponentcount: %d\n",componentCount);
+	printf("\nComponentcount: %d\n",componentCount);
 
 	printf("Resistor 0: %f\n", res_array[0]);
 	printf("Resistor 1: %f\n", res_array[1]);
 	printf("Resistor 2: %f\n\n", res_array[2]);
-*/	
+	
 printf("Ersättningsresistanser i E12-serien kopplade i serie:");	
 	for(i = componentCount-1; i>=0;i--){
 		if(i!=componentCount-1){

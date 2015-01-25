@@ -5,10 +5,10 @@ CPATH = ../include
 all: libcomponent.so
 
 libcomponent.o:libcomponent.c ../include/libcomponent.h 
-	gcc -c -fPIC libcomponent.c
+	gcc -g -c -fPIC libcomponent.c
 
 libcomponent.so: libcomponent.o
-	gcc -shared -fPIC -o libcomponent.so libcomponent.o
+	gcc -g -shared -fPIC -o libcomponent.so libcomponent.o
 
 install: libcomponent.so
 	@runner=`whoami` ; \
@@ -27,7 +27,7 @@ uninstall:
 	rm /usr/lib/libcomponent.so
 
 %.o: %.c
-	gcc -c -I. $? 
+	gcc -g -c -I. $? 
 
 clean:
 	echo $(CPATH)

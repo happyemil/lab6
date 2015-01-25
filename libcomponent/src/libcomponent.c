@@ -1,15 +1,22 @@
 /* Author Emil Käll*/
+#include <stdio.h>
+#include <malloc.h>
 
 int e_resistance(float orig_resistance, float *res_array)
 {
-  float closest_distance,res1,res2,res3,diff;
+  float closest_distance,diff;
   float E12_Array[13] = {0,10,12,15,18,22,27,33,39,47,56,68,82};
   int i,j,k;
-  
+  float res1=0;
+  float res2=0;
+  float res3=0;
+  float tmp;
+
   // Let's create a larger array for all decades, i.e all E12 values
   float fullE12_Array[13+12+12+12+12+1];
   fullE12_Array[0] = 0;
   int decade;
+  int count = 3;
   
   //We loop over the decades
   for (decade=1;decade<6;decade++)
@@ -45,44 +52,34 @@ int e_resistance(float orig_resistance, float *res_array)
 	    diff = fullE12_Array[i]+fullE12_Array[j]+fullE12_Array[k]-orig_resistance;
 	  if (diff == 0)
 	    {
-	      //If we get here we're done. Just to assign the values to the result array
-	      if (res1 == 0 && res2 == 0)
+	      //This means we are done
+
+	      res_array[0] = fullE12_Array[i];
+	      res_array[1] = fullE12_Array[j];
+	      res_array[2] = fullE12_Array[k];
+	     
+	      //Lets sort it
+	     
+      	      for (i = 0; i < 3; ++i)
 		{
-		  res_array[0] = res3;
-		  res_array[1] = 0;
-		  res_array[2] = 0;
+		  for (j = i + 1; j < 3; ++j)
+		    {
+		      if (res_array[i] < res_array[j])
+			{
+			  tmp =  res_array[i];
+			  res_array[i] = res_array[j];
+			  res_array[j] = tmp;
+			}
+		    }
 		}
-	      else if (res1 == 0 && res3 == 0)
-		{
-		  res_array[0] = res2;
-		  res_array[1] = 0;
-		  res_array[2] = 0;
-		}
-	      else if (res1 == 0 && res2 != 0 && res3 != 0 )
-		{
-		  res_array[0] = res2;
-		  res_array[1] = res3;
-		  res_array[2] = 0;
-		}
-	      else if (res1 != 0 && res2 == 0 && res3 != 0 )
-		{
-		  res_array[0] = res1;
-		  res_array[1] = res3;
-		  res_array[2] = 0;
-		}
-	      else
-		{
-		  res_array[0] = res1;
-		  res_array[1] = res2;
-		  res_array[2] = res3;
-		}
+
 	      //Lets se how many resistors in series we use
-	      int count=3;
-	      if (i==0)
+	      count=3;
+	      if (res_array[0]==0)
 		--count;
-	      if (j==0)
+	      if (res_array[1]==0)
 		--count;
-	      if (k==0)
+	      if (res_array[2]==0)
 		--count;
 	      return count;
 	    }
@@ -97,47 +94,34 @@ int e_resistance(float orig_resistance, float *res_array)
 	    }
 	}
 
+
   //We are out of all for-loops meaning that we didn't find a perfect match,
   //but the closest match is in res1,2,3.
-  if (res1 == 0 && res2 == 0)
+  res_array[0] = res1;
+  res_array[1] = res2;
+  res_array[2] = res3;
+  
+  //Lets sort it
+  for (i = 0; i < 3; ++i)
     {
-      res_array[0] = res3;
-      res_array[1] = 0;
-      res_array[2] = 0;
-    }
-  else if (res1 == 0 && res3 == 0)
-    {
-      res_array[0] = res2;
-      res_array[1] = 0;
-      res_array[2] = 0;
-    }
-  else if (res1 == 0 && res2 != 0 && res3 != 0 )
-    {
-      res_array[0] = res2;
-      res_array[1] = res3;
-      res_array[2] = 0;
-    }
-  else if (res1 != 0 && res2 == 0 && res3 != 0 )
-    {
-      res_array[0] = res1;
-      res_array[1] = res3;
-      res_array[2] = 0;
-    }
-  else
-    {
-      res_array[0] = res1;
-      res_array[1] = res2;
-      res_array[2] = res3;
+      for (j = i + 1; j < 3; ++j)
+	{
+	  if (res_array[i] < res_array[j])
+	    {
+	      tmp =  res_array[i];
+	      res_array[i] = res_array[j];
+	      res_array[j] = tmp;
+	    }
+	}
     }
 
-
-  //How many resistors did we use?
-  int count=3;
-  if (res1==0)
+  //Lets se how many resistors in series we use
+  count=3;
+  if (res_array[0]==0)
     --count;
-  if (res2==0)
+  if (res_array[1]==0)
     --count;
-  if (res3==0)
+  if (res_array[2]==0)
     --count;
   return count;
 }
